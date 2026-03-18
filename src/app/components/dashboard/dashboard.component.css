@@ -1,37 +1,408 @@
-/* Container to give the 3D depth effect */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.dashboard-shell {
+  display: grid;
+  gap: 28px;
+  padding-bottom: 40px;
+}
+
+.hero-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
+  gap: 24px;
+}
+
+.panel-surface {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid var(--border-strong);
+  border-radius: 30px;
+  background: var(--surface-elevated);
+  box-shadow: var(--shadow-soft);
+}
+
+.panel-surface::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, transparent, rgba(255, 255, 255, 0.02));
+  pointer-events: none;
+}
+
+.hero-copy,
+.composer {
+  padding: 32px;
+}
+
+.eyebrow {
+  display: inline-flex;
+  margin-bottom: 14px;
+  color: var(--accent-strong);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.hero-copy h1,
+.composer h2,
+.results-header h2,
+.empty-state h2 {
+  margin: 0;
+  font-family: var(--font-heading);
+  line-height: 1.02;
+  letter-spacing: -0.04em;
+  color: var(--text-primary);
+}
+
+.hero-copy h1 {
+  max-width: 12ch;
+  font-size: clamp(2.6rem, 5vw, 4.75rem);
+}
+
+.hero-copy p,
+.composer-footer p,
+.results-header p,
+.empty-state p,
+.composer-hint {
+  color: var(--text-secondary);
+}
+
+.hero-copy p {
+  max-width: 62ch;
+  margin: 18px 0 0;
+  font-size: 1.05rem;
+  line-height: 1.7;
+}
+
+.hero-highlights {
+  display: grid;
+  gap: 14px;
+  margin-top: 28px;
+}
+
+.hero-highlights div {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 16px;
+  border: 1px solid var(--border-muted);
+  border-radius: 18px;
+  background: var(--surface-muted);
+  color: var(--text-primary);
+}
+
+.hero-highlights strong {
+  display: inline-grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 999px;
+  background: rgba(58, 106, 255, 0.14);
+  color: var(--accent-strong);
+}
+
+.composer {
+  display: grid;
+  gap: 20px;
+}
+
+.composer-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.composer h2,
+.results-header h2,
+.empty-state h2 {
+  font-size: clamp(1.8rem, 3vw, 2.4rem);
+}
+
+.composer-hint {
+  font-size: 0.92rem;
+  text-align: right;
+}
+
+.notes-input {
+  min-height: 220px;
+  resize: vertical;
+  padding: 18px 20px;
+  border: 1px solid var(--border-strong);
+  border-radius: 22px;
+  background: var(--surface-muted);
+  color: var(--text-primary);
+  font: inherit;
+  line-height: 1.65;
+  transition: border-color 180ms ease, box-shadow 180ms ease, background-color 180ms ease;
+}
+
+.notes-input::placeholder {
+  color: var(--text-tertiary);
+}
+
+.notes-input:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 4px var(--ring-color);
+}
+
+.composer-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+}
+
+.composer-footer p {
+  margin: 0;
+  max-width: 44ch;
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+
+.generate-button {
+  flex-shrink: 0;
+  padding: 14px 22px;
+  border: 0;
+  border-radius: 999px;
+  background: linear-gradient(135deg, var(--accent), var(--accent-strong));
+  color: #eff6ff;
+  font: inherit;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  cursor: pointer;
+  box-shadow: 0 18px 40px rgba(58, 106, 255, 0.28);
+  transition: transform 180ms ease, box-shadow 180ms ease, opacity 180ms ease;
+}
+
+.generate-button:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 20px 44px rgba(58, 106, 255, 0.34);
+}
+
+.generate-button:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+.status-banner {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 16px 18px;
+  border: 1px solid var(--border-strong);
+  border-radius: 20px;
+  background: var(--surface-elevated);
+  box-shadow: var(--shadow-soft);
+}
+
+.status-banner p {
+  margin: 0;
+}
+
+.status-error {
+  border-color: rgba(229, 72, 77, 0.28);
+  color: var(--danger-text);
+  background: var(--danger-surface);
+}
+
+.status-loading {
+  color: var(--text-primary);
+}
+
+.spinner {
+  width: 22px;
+  height: 22px;
+  border: 2px solid rgba(58, 106, 255, 0.18);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: spin 800ms linear infinite;
+}
+
+.results-section {
+  display: grid;
+  gap: 20px;
+}
+
+.results-header {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 18px;
+}
+
+.results-header p {
+  margin: 0;
+  max-width: 34ch;
+  text-align: right;
+}
+
+.flashcard-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 20px;
+}
+
+.flashcard {
+  height: 280px;
+  cursor: pointer;
+}
+
 .perspective {
   perspective: 1000px;
 }
 
-/* The wrapper that actually rotates */
 .preserve-3d {
+  position: relative;
+  width: 100%;
+  height: 100%;
   transform-style: preserve-3d;
   transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* The class toggled by Angular to flip the card */
 .rotate-y-180 {
   transform: rotateY(180deg);
 }
 
-/* Hide the back of the card when it's facing away */
 .backface-hidden {
   backface-visibility: hidden;
-  -webkit-backface-visibility: hidden; /* Safari support */
+  -webkit-backface-visibility: hidden;
 }
 
-/* Ensure the back side is already rotated so it faces the right way when flipped */
 .rotate-y-180-initial {
   transform: rotateY(180deg);
 }
 
-/* Optional: Add a slight lift effect on hover before clicking */
-.perspective:hover .preserve-3d:not(.rotate-y-180) {
-  transform: translateY(-5px);
-  transition: transform 0.2s ease;
+.flashcard-face {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 22px;
+  border: 1px solid var(--border-strong);
+  border-radius: 26px;
+  box-shadow: var(--shadow-soft);
 }
 
-/* Custom shadow for a more "paper-like" feel */
-.shadow-md {
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+.flashcard-front {
+  background:
+    radial-gradient(circle at top right, rgba(58, 106, 255, 0.18), transparent 30%),
+    var(--surface-elevated);
+}
+
+.flashcard-back {
+  background:
+    radial-gradient(circle at bottom left, rgba(16, 185, 129, 0.18), transparent 32%),
+    var(--surface-raised);
+}
+
+.card-chip {
+  display: inline-flex;
+  align-self: flex-start;
+  padding: 8px 12px;
+  border-radius: 999px;
+  background: rgba(58, 106, 255, 0.12);
+  color: var(--accent-strong);
+  font-size: 0.76rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.card-copy {
+  margin: 0;
+  color: var(--text-primary);
+  font-size: 1.05rem;
+  line-height: 1.65;
+}
+
+.card-meta {
+  color: var(--text-tertiary);
+  font-size: 0.9rem;
+}
+
+.perspective:hover .preserve-3d:not(.rotate-y-180) {
+  transform: translateY(-6px);
+}
+
+.empty-state {
+  display: grid;
+  place-items: center;
+  gap: 12px;
+  padding: 54px 32px;
+  text-align: center;
+}
+
+.empty-state .material-icons {
+  display: grid;
+  place-items: center;
+  width: 64px;
+  height: 64px;
+  border-radius: 20px;
+  background: rgba(58, 106, 255, 0.14);
+  color: var(--accent-strong);
+  font-size: 2rem;
+}
+
+.empty-state p {
+  max-width: 54ch;
+  margin: 0;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (max-width: 960px) {
+  .hero-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .hero-copy h1 {
+    max-width: 14ch;
+  }
+
+  .results-header,
+  .composer-header,
+  .composer-footer {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .results-header p,
+  .composer-hint {
+    text-align: left;
+  }
+}
+
+@media (max-width: 640px) {
+  .hero-copy,
+  .composer,
+  .empty-state {
+    padding: 24px;
+  }
+
+  .flashcard {
+    height: 250px;
+  }
+
+  .generate-button {
+    width: 100%;
+  }
 }

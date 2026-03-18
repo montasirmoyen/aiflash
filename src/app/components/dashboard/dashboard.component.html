@@ -1,44 +1,106 @@
-<div class="container mx-auto p-6">
-  <h1 class="text-3xl font-bold mb-6 text-center">AIFlash Generator</h1>
+<section class="dashboard-shell">
+  <div class="hero-grid">
+    <section class="hero-copy panel-surface">
+      <span class="eyebrow">Smarter review workflow</span>
+      <h1>Turn long notes into fast, high-signal flashcards.</h1>
+      <p>
+        Paste class notes, chapter summaries, or rough study guides. AIFlash turns them into a
+        deck you can scan, flip, and review without rewriting everything by hand.
+      </p>
 
-  <div class="max-w-2xl mx-auto mb-10">
-    <textarea 
-      [(ngModel)]="userNotes" 
-      class="w-full p-4 border rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500"
-      rows="6" 
-      placeholder="Paste your lecture notes here...">
-    </textarea>
-    
-    <button 
-      (click)="onGenerate()"
-      [disabled]="isLoading || !userNotes"
-      class="mt-4 w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 disabled:opacity-50">
-      {{ isLoading ? 'Generating with AI...' : 'Generate Flashcards' }}
-    </button>
-  </div>
-
-  <div *ngIf="isLoading" class="flex justify-center my-10">
-    <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
-  </div>
-
-  <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-    <div *ngFor="let card of flashcards" 
-         (click)="toggleCard(card)"
-         class="cursor-pointer h-48 w-full perspective">
-      
-      <div class="relative w-full h-full transition-all duration-500 preserve-3d"
-           [class.rotate-y-180]="card.isFlipped">
-        
-        <div class="absolute inset-0 bg-white border-2 border-blue-100 rounded-xl p-6 flex flex-col items-center justify-center text-center backface-hidden shadow-md">
-          <span class="text-xs font-bold text-blue-500 uppercase mb-2">{{ card.category }}</span>
-          <p class="text-lg font-medium">{{ card.question }}</p>
+      <div class="hero-highlights">
+        <div>
+          <strong>1.</strong>
+          <span>Paste source material</span>
         </div>
-
-        <div class="absolute inset-0 bg-blue-50 border-2 border-blue-600 rounded-xl p-6 flex items-center justify-center text-center backface-hidden rotate-y-180 shadow-inner">
-          <p class="text-lg text-gray-800">{{ card.answer }}</p>
+        <div>
+          <strong>2.</strong>
+          <span>Generate an instant deck</span>
         </div>
-
+        <div>
+          <strong>3.</strong>
+          <span>Flip through concepts faster</span>
+        </div>
       </div>
-    </div>
+    </section>
+
+    <section class="composer panel-surface">
+      <div class="composer-header">
+        <div>
+          <span class="eyebrow">Input</span>
+          <h2>Build a new flashcard set</h2>
+        </div>
+        <span class="composer-hint">Best with 1 to 5 paragraphs of notes</span>
+      </div>
+
+      <label class="sr-only" for="notes-input">Study notes</label>
+      <textarea
+        id="notes-input"
+        [(ngModel)]="userNotes"
+        class="notes-input"
+        rows="8"
+        placeholder="Paste your lecture notes, summary, or key concepts here..."
+      ></textarea>
+
+      <div class="composer-footer">
+        <p>Clear inputs usually produce cleaner questions and less repetitive answers.</p>
+        <button type="button" class="generate-button" (click)="onGenerate()" [disabled]="isLoading || !userNotes.trim()">
+          {{ isLoading ? 'Generating flashcards...' : 'Generate flashcards' }}
+        </button>
+      </div>
+    </section>
   </div>
-</div>
+
+  <section *ngIf="error" class="status-banner status-error" role="alert">
+    <span class="material-icons">error</span>
+    <p>{{ error }}</p>
+  </section>
+
+  <section *ngIf="isLoading" class="status-banner status-loading" aria-live="polite">
+    <div class="spinner" aria-hidden="true"></div>
+    <p>Generating a study deck from your notes...</p>
+  </section>
+
+  <section *ngIf="flashcards.length; else emptyState" class="results-section">
+    <div class="results-header">
+      <div>
+        <span class="eyebrow">Deck ready</span>
+        <h2>{{ flashcards.length }} flashcards generated</h2>
+      </div>
+      <p>Click any card to flip between the prompt and the answer.</p>
+    </div>
+
+    <div class="flashcard-grid">
+      <article
+        *ngFor="let card of flashcards"
+        class="flashcard perspective"
+        (click)="toggleCard(card)"
+      >
+        <div class="flashcard-inner preserve-3d" [class.rotate-y-180]="card.isFlipped">
+          <section class="flashcard-face flashcard-front backface-hidden">
+            <span class="card-chip">{{ card.category }}</span>
+            <p class="card-copy">{{ card.question }}</p>
+            <span class="card-meta">Tap to reveal answer</span>
+          </section>
+
+          <section class="flashcard-face flashcard-back backface-hidden rotate-y-180-initial">
+            <span class="card-chip">Answer</span>
+            <p class="card-copy">{{ card.answer }}</p>
+            <span class="card-meta">Tap to return to question</span>
+          </section>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <ng-template #emptyState>
+    <section class="empty-state panel-surface" *ngIf="!isLoading">
+      <span class="material-icons">auto_awesome</span>
+      <h2>Your generated deck will appear here</h2>
+      <p>
+        Start with a concise block of notes and AIFlash will produce question-and-answer cards
+        you can flip through immediately.
+      </p>
+    </section>
+  </ng-template>
+</section>
