@@ -1,0 +1,37 @@
+/* Container to give the 3D depth effect */
+.perspective {
+  perspective: 1000px;
+}
+
+/* The wrapper that actually rotates */
+.preserve-3d {
+  transform-style: preserve-3d;
+  transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* The class toggled by Angular to flip the card */
+.rotate-y-180 {
+  transform: rotateY(180deg);
+}
+
+/* Hide the back of the card when it's facing away */
+.backface-hidden {
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden; /* Safari support */
+}
+
+/* Ensure the back side is already rotated so it faces the right way when flipped */
+.rotate-y-180-initial {
+  transform: rotateY(180deg);
+}
+
+/* Optional: Add a slight lift effect on hover before clicking */
+.perspective:hover .preserve-3d:not(.rotate-y-180) {
+  transform: translateY(-5px);
+  transition: transform 0.2s ease;
+}
+
+/* Custom shadow for a more "paper-like" feel */
+.shadow-md {
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
