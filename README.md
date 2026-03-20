@@ -3,6 +3,8 @@ Serverless app utilizing generative AI to transform raw study notes into interac
 
 This project was part of a challenge: https://montasirmoyen.com/blog/aiflash
 
-**Basic Usage**
+**Deployment**
+
+You can deploy your own version of the project using AWS:
 - Lambda function to generate flashcards is provided in ```/aws/lambda/```
 - Configure the URL in ```/src/app/services/api.service.ts:10```
